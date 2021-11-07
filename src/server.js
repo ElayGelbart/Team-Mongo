@@ -12,17 +12,21 @@ app.use('/', express.static(path.resolve("./front")));               // serve ma
 
 app.get('/', async (req, res) => {     
     res.sendFile(path.resolve("../front/index.html"))
-  });
+});
 
 app.get("/api/persons", (req, res) => {
     res.send(data)
-})
+});
 
 app.get("/info", (req, res) => {
     res.send(`<h1>PhoneBook has info for ${data.length} Pepole</h1>
                 <p>LastSync: ${new Date().toLocaleString()} </p>`)
-})
+});
 
+app.get('/api/persons/:id', (req, res) => {
+    const personObj = data.find(person => person.id === Number(req.params.id));
+    personObj ? res.send(personObj) : res.status(204).send(`<p> Cant Find a person with that Id`);
+});
 
 
 

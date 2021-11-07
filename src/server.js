@@ -7,6 +7,8 @@ const PORT = 3001;
 app.listen(PORT, ()=>{
     console.log("running...");
 });
+app.use(express.json()) ;
+// app.use(express.urlencoded({ extended: true }));
 
 app.get("/api/persons",  function (req,res){
     res.send(data.data);
@@ -29,7 +31,7 @@ app.get("/api/persons/:id", function (req,res){
     res.sendStatus(404);
 })
 
-app.delete("/api/persons/:id", function (req,res){
+app.delete("/api/persons/", function (req,res){
     const id = req.params.id;
     for (let i =0; i<data.data.length; i++){
         if(+data.data[i].id === +id){
@@ -39,4 +41,23 @@ app.delete("/api/persons/:id", function (req,res){
         }
     }
     res.sendStatus(404);
+})
+
+app.post("/api/persons", function (req,res){
+    const newContactName = req.body.name;
+    const newContactNumber = req.body.number;
+    let idNumber = 0;
+    for(let i = 0; i < data.data.length; i++){
+        if(data.data[i].id > idNumber){
+            idNumber = data.data[i].id 
+        }
+    }
+    const newContact = {
+        "id": idNumber+1,
+        "name": newContactName,
+        "number": newContactNumber
+    }
+    data.data.push(newContact);
+    console.log(data.data);
+    res.send(newContactNumber);
 })

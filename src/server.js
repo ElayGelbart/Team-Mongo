@@ -25,6 +25,14 @@ const phonebook = [
 ];
 app.get("/api/persons", (req, res) => {
   res.send(phonebook);
+});
+app.get("/info", (req, res) => {
+  let counter = 0;
+  for (let value of phonebook) {
+    counter++;
+  }
+  res.send(`Phonebook has info for ${counter} people
+  ${new Date()}`)
 })
 app.listen(port, () => {
   console.log(`server is on port ${port}`);

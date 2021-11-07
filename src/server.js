@@ -12,3 +12,6 @@ app.get("/api/persons",  function (req,res){
     res.send(data);
 })
 
+app.get("/info", function (req,res){
+    res.send({Contacts: data.data.length, date:new Date()})
+})

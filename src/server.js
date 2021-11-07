@@ -1,7 +1,10 @@
-const { ESRCH } = require("constants");
 const express = require("express");
 const port = 8080;
 const app = express();
+
+app.use(express.json()) // for parsing application/json
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 const phonebook = [
   {
     "id": 1,
@@ -48,7 +51,20 @@ app.delete("/api/persons/delete/:id", (req, res) => {
     }
   }
   res.sendStatus(404);
-})
+});
+
+app.post("/api/persons", (req, res) => {
+  const userName = req.body.name;
+  const userNumber = req.body.number;
+  const userId = Math.floor(Math.random() * (1000000000 - 100 + 1) + 100);
+  const userPhoneObj = {
+    id: userId,
+    name: userName,
+    number: userNumber
+  };
+  phonebook.push(userPhoneObj);
+  res.send("added to phone book");
+});
 
 app.get("/info", (req, res) => {
   let counter = 0;

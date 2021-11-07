@@ -57,6 +57,18 @@ app.post("/api/persons", (req, res) => {
   const userName = req.body.name;
   const userNumber = req.body.number;
   const userId = Math.floor(Math.random() * (1000000000 - 100 + 1) + 100);
+  if (!userName || !userNumber) { // Check Falsy
+    res.status(403);
+    res.send({ error: 'must be number and name' })
+    return;
+  }
+  for (let phoneObj of phonebook) {
+    if (phoneObj.name == userName) {
+      res.status(401);
+      res.send({ error: 'name must be unique' })
+      return;
+    }
+  }
   const userPhoneObj = {
     id: userId,
     name: userName,

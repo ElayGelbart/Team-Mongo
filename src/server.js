@@ -37,7 +37,15 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const newId = Math.floor(Math.random()*1000);
-    const { name, number } = req.body
+    const { name, number } = req.body;
+    if(!name || !number){
+        res.status(400).send({error: "Missing information"});
+        return;
+    }
+    if(checkTakenName(name)) {
+        res.status(400).send({error: "Name is taken"});
+        return;
+    }
     const newPerson = {id: newId, name, number };
     data.push(newPerson);
     res.send();
@@ -50,4 +58,11 @@ function getMatchingPerson(inputId){
         }
     }
     return;
+}
+
+function checkTakenName(inputName){
+    for(let person in data){
+        if(data[person].name === inputName) return true;
+    }
+    return false;
 }

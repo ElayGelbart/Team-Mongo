@@ -20,10 +20,26 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons/:id', (req, res) => {
     const personId = Number(req.params.id);
+    const matchingPerson = (getMatchingPerson(personId));
+    matchingPerson
+    ? res.send(matchingPerson)
+    : res.status(204).send({error: "Can't find person"});
+})
+
+app.delete('/api/persons/:id', (req, res) => {
+    const personId = Number(req.params.id);
+    const matchingPerson = (getMatchingPerson(personId));
+    matchingPerson
+    ? data.splice(data.indexOf(matchingPerson),1)
+    : res.status(204).send({error: "Can't find person"})
+    res.send();
+})
+
+function getMatchingPerson(inputId){
     for(let person in data){
-        if(data[person].id === personId){
-            res.send(data[person]);
+        if(data[person].id === inputId){
+            return data[person];
         }
     }
-    res.status(204).send({error: "Can't find person"});
-})
+    return;
+}

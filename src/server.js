@@ -1,5 +1,6 @@
 // server code
 const express = require('express');
+const morgan = require('morgan')
 const app = express();
 const data = require("./database")
 const PORT = 3001;
@@ -9,6 +10,7 @@ app.listen(PORT, ()=>{
 });
 app.use(express.json()) ;
 // app.use(express.urlencoded({ extended: true }));
+app.use(morgan("tiny"))
 
 app.get("/api/persons",  function (req,res){
     res.send(data.data);

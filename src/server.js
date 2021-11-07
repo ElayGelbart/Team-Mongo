@@ -36,7 +36,18 @@ app.get("/api/persons/:id", (req, res) => {
       return
     }
   }
-  res.send(404);
+  res.sendStatus(404);
+});
+
+app.delete("/api/persons/delete/:id", (req, res) => {
+  for (let i = 0; i < phonebook.length; i++) {
+    if (phonebook[i].id == req.params.id) {
+      phonebook.splice(i, 1);
+      res.send("selected person has been deleted")
+      return
+    }
+  }
+  res.sendStatus(404);
 })
 
 app.get("/info", (req, res) => {

@@ -2,12 +2,14 @@ const express = require('express');
 const app = express();
 const port = 3001;
 const data = require('./data');
+const morgan = require('morgan');
 
 app.use(express.json());
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 })
 
+app.use(morgan('tiny'));
 
 app.get('/api/persons', (req, res) => {
     res.send(data);

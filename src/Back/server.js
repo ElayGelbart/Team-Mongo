@@ -41,8 +41,9 @@ app.get("/api/persons", (req, res) => {
 app.get("/api/persons/:id", (req, res) => {
   for (let phoneObj of phonebook) {
     if (phoneObj.id == req.params.id) {
+      phoneObj = JSON.stringify(phoneObj);
       res.send(phoneObj);
-      return
+      return;
     }
   }
   res.sendStatus(404);

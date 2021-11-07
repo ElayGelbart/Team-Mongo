@@ -1,4 +1,5 @@
 const HOST = "http://localhost:8080"
+
 const getPhoneBook = async () => {
   const response = await fetch(`${HOST}/api/persons`);
   const responseArrayPerson = await response.json();
@@ -57,8 +58,8 @@ const addPersonToServer = async () => {
       if (!res.ok) {
         throw new Error("UserNameTaken")
       }
+      return res;
     });
-    console.log("here");
     alert("Added to phone book");
   } catch (err) {
     document.getElementById("validationCustomName").classList.add("is-invalid")
@@ -66,5 +67,63 @@ const addPersonToServer = async () => {
     document.getElementById("nameValidationText").className = "invalid-feedback";
   }
 }
+
+const getPersonFromPhonebook = async () => {
+  const personID = document.getElementById("validationCustomPersonId").value;
+  try {
+    const response = await fetch(`${HOST}/api/persons/${personID}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("NO ID IN DB");
+      }
+      return res;
+    }
+    );
+    const personObj = await response.json();
+    document.getElementById("tablePersonData").innerHTML = `
+    <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">${personObj.id}</th>
+      <td>${personObj.name}</td>
+      <td>${personObj.number}</td>
+      <td><button onclick="deletePersonID(${personObj.id})">Delete Person</button></td>
+    </tr>
+  </tbody>
+  `
+
+  } catch (err) {
+    alert("not here") // change
+  }
+}
+
+const deletePersonID = async (PersonID) => {
+  try {
+    const response = await fetch(`${HOST}/api/persons/delete/${PersonID}`, {
+      method: "DELETE"
+    }).then((res) => {
+      if (!res.ok) {
+        throw new Error("cant delete");
+      }
+      return res;
+    });
+    document.getElementById("tablePersonData").innerHTML = "";
+    alert("deleted");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 document.getElementById("getPhonebookBtn").addEventListener("click", getPhoneBook)
 document.getElementById("sendServerNewPerson").addEventListener("click", addPersonToServer)
+document.getElementById("sendSearchPersonIdBtn").addEventListener("click", getPersonFromPhonebook)

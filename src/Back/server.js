@@ -12,7 +12,7 @@ app.use(morgan('dev', {
 }));
 app.use("/", express.static(`${__dirname}/../Front`));
 app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/../Frontend/index.html`);
+  res.sendFile(`${__dirname}/../Front/index.html`);
 });
 const phonebook = [
   {

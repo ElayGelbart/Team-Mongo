@@ -10,7 +10,14 @@ app.listen(PORT, ()=>{
 });
 app.use(express.json()) ;
 // app.use(express.urlencoded({ extended: true }));
-app.use(morgan("tiny"))
+morgan.token("data", (req) =>{
+    return JSON.stringify(req.body);
+})
+app.use(morgan(":method :url :status :res[content-length] - :response-time ms :data", {
+    skip : function(req,res){
+       return req.method !== "POST" 
+    }    
+}))
 
 app.get("/api/persons",  function (req,res){
     res.send(data.data);
@@ -33,12 +40,14 @@ app.get("/api/persons/:id", function (req,res){
     res.sendStatus(404);
 })
 
-app.delete("/api/persons/", function (req,res){
+app.delete("/api/persons/:id", function (req,res){
     const id = req.params.id;
     for (let i =0; i<data.data.length; i++){
         if(+data.data[i].id === +id){
+            console.log(data.data);
             data.data.splice(i,1);
             res.send("Deleted successfully!");
+            console.log(data.data);
             return
         }
     }

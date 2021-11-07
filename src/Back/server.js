@@ -10,7 +10,10 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use(morgan('dev', {
   skip: function (req, res) { return req.method !== "POST" }
 }));
-
+app.use("/", express.static(`${__dirname}/../Front`));
+app.get("/", (req, res) => {
+  res.sendFile(`${__dirname}/../Frontend/index.html`);
+});
 const phonebook = [
   {
     "id": 1,

@@ -28,3 +28,15 @@ app.get("/api/persons/:id", function (req,res){
     }
     res.sendStatus(404);
 })
+
+app.delete("/api/persons/:id", function (req,res){
+    const id = req.params.id;
+    for (let i =0; i<data.data.length; i++){
+        if(+data.data[i].id === +id){
+            data.data.splice(i,1);
+            res.send("Deleted successfully!");
+            return
+        }
+    }
+    res.sendStatus(404);
+})

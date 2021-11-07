@@ -1,3 +1,4 @@
+const { ESRCH } = require("constants");
 const express = require("express");
 const port = 8080;
 const app = express();
@@ -23,17 +24,30 @@ const phonebook = [
     "number": "39-23-6423122"
   }
 ];
+
 app.get("/api/persons", (req, res) => {
   res.send(phonebook);
 });
+
+app.get("/api/persons/:id", (req, res) => {
+  for (let phoneObj of phonebook) {
+    if (phoneObj.id == req.params.id) {
+      res.send(phoneObj);
+      return
+    }
+  }
+  res.send(404);
+})
+
 app.get("/info", (req, res) => {
   let counter = 0;
-  for (let value of phonebook) {
+  for (let obj of phonebook) {
     counter++;
   }
   res.send(`Phonebook has info for ${counter} people
   ${new Date()}`)
-})
+});
+
 app.listen(port, () => {
   console.log(`server is on port ${port}`);
 });

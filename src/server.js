@@ -46,8 +46,16 @@ app.delete("/api/persons/", function (req,res){
 app.post("/api/persons", function (req,res){
     const newContactName = req.body.name;
     const newContactNumber = req.body.number;
+    if(!newContactName || !newContactNumber){
+        res.status(403).send("The name or the number is missing");
+        return;
+    }
     let idNumber = 0;
     for(let i = 0; i < data.data.length; i++){
+        if(data.data[i].name === newContactName){
+            res.status(403).send("That name is already exists in the phonebook");
+            return;
+        }
         if(data.data[i].id > idNumber){
             idNumber = data.data[i].id 
         }
@@ -58,6 +66,6 @@ app.post("/api/persons", function (req,res){
         "number": newContactNumber
     }
     data.data.push(newContact);
-    console.log(data.data);
-    res.send(newContactNumber);
+    res.send(`${newContact.name} successfully add to your phonebook!`);
 })
+

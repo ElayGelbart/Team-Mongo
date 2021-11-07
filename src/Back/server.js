@@ -97,6 +97,6 @@ app.get("/info", (req, res) => {
   ${new Date()}`)
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || port, () => {
   console.log(`server is on port ${port}`);
 });

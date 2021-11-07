@@ -1,5 +1,5 @@
-const HOST = "http://localhost:8080"
-
+// const HOST = "http://localhost:8080" for dev on local
+const HOST = "https://egmongodb.herokuapp.com"
 const getPhoneBook = async () => {
   const response = await fetch(`${HOST}/api/persons`);
   const responseArrayPerson = await response.json();

@@ -4,8 +4,11 @@
   "description": "Team Project",
   "main": "./src/server.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.17.1",
-    "nodemon": "^2.0.14"
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.14",
+    "shortid": "^2.2.16"
   },
   "devDependencies": {},
   "scripts": {

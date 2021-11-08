@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/../Front/index.html`);
 });
 
-const phonebook = [
+const phonebook = [ // later will be DB
   {
     "id": 1,
     "name": "Arto Hellas",
@@ -46,7 +46,7 @@ app.get("/api/persons", (req, res) => {
   res.send(phonebook);
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   for (let phoneObj of phonebook) {
     if (phoneObj.id == req.params.id) {
       phoneObj = JSON.stringify(phoneObj);
@@ -54,10 +54,10 @@ app.get("/api/persons/:id", (req, res) => {
       return;
     }
   }
-  res.sendStatus(404);
+  next({ status: 404, msg: 'Person not found' })
 });
 
-app.delete("/api/persons/delete/:id", (req, res) => {
+app.delete("/api/persons/delete/:id", (req, res, next) => {
   for (let i = 0; i < phonebook.length; i++) {
     if (phonebook[i].id == req.params.id) {
       phonebook.splice(i, 1);
@@ -65,22 +65,20 @@ app.delete("/api/persons/delete/:id", (req, res) => {
       return
     }
   }
-  res.sendStatus(404);
+  next({ status: 404, msg: 'Person not found' })
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const userName = req.body.name;
   const userNumber = req.body.number;
   const userId = Math.floor(Math.random() * (1000000000 - 100 + 1) + 100);
   if (!userName || !userNumber) { // Check Falsy
-    res.status(403);
-    res.send({ error: 'must be number and name' })
+    next({ status: 403, msg: 'must be number and name' })
     return;
   }
   for (let phoneObj of phonebook) {
     if (phoneObj.name == userName) {
-      res.status(401);
-      res.send({ error: 'name must be unique' })
+      next({ status: 403, msg: 'name must be unique' });
       return;
     }
   }
@@ -94,13 +92,23 @@ app.post("/api/persons", (req, res) => {
 });
 
 app.get("/info", (req, res) => {
-  let counter = 0;
-  for (let obj of phonebook) {
-    counter++;
-  }
-  res.send(`Phonebook has info for ${counter} people
+  res.send(`Phonebook has info for ${phonebook.length} people
   ${new Date()}`)
 });
+
+app.use(ErrorHandler = (err, req, res, next) => {
+  console.log(err); // for logs
+  if (err.status) {
+    res.statusMessage = err.msg
+    res.status(err.status).send({
+      status: err.status,
+      message: err.msg,
+    });
+  }
+  else {
+    res.send(500)
+  }
+})
 
 app.listen(process.env.PORT || port, () => {
   console.log(`server is on port ${port}`);

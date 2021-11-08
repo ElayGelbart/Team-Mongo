@@ -2,7 +2,7 @@ const express = require('express');
 const data = require('./data');
 const morgan = require('morgan');
 const cors = require('cors');
-const { response } = require('express');
+const { getMatchingPerson, checkTakenName } = require('./helpers')
 const app = express();
 const port = 3001;
 
@@ -31,7 +31,7 @@ app.get('/info', (req, res) => {
 
 app.get('/api/persons/:id', (req, res) => {
     const personId = Number(req.params.id);
-    const matchingPerson = (getMatchingPerson(personId));
+    const matchingPerson = (getMatchingPerson(personId, data));
     matchingPerson
     ? res.send(matchingPerson)
     : res.status(400).send({error: "Can't find person"});
@@ -39,7 +39,7 @@ app.get('/api/persons/:id', (req, res) => {
 
 app.delete('/api/persons/:id', (req, res) => {
     const personId = Number(req.params.id);
-    const matchingPerson = (getMatchingPerson(personId));
+    const matchingPerson = (getMatchingPerson(personId, data));
     if(matchingPerson){
         data.splice(data.indexOf(matchingPerson),1);
         res.send(data);
@@ -50,13 +50,13 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.post('/api/persons', (req, res) => {
-    const newId = Math.floor(Math.random()*1000);
+    const newId = Math.floor(Math.random()*100000);
     const { name, number } = req.body;
     if(!name || !number){
         res.status(400).send({error: "Missing information"});
         return;
     }
-    if(checkTakenName(name)) {
+    if(checkTakenName(name, data)) {
         res.status(400).send({error: "Name is taken."});
         return;
     }
@@ -64,19 +64,3 @@ app.post('/api/persons', (req, res) => {
     data.push(newPerson);
     res.send(data);
 })
-
-function getMatchingPerson(inputId){
-    for(let person in data){
-        if(data[person].id === inputId){
-            return data[person];
-        }
-    }
-    return;
-}
-
-function checkTakenName(inputName){
-    for(let person in data){
-        if(data[person].name === inputName) return true;
-    }
-    return false;
-}

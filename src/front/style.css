@@ -32,7 +32,6 @@
     grid-template-rows: repeat(15, 1fr);
     grid-column-gap: 0px;
     grid-row-gap: 0px;
-    background-color: cornsilk;
 }
 
 #phonebook { grid-area: 2 / 2 / 7 / 10; }

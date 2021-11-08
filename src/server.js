@@ -53,12 +53,12 @@ app.post('/api/persons', (req, res) => {
         return;
     }
     if(checkTakenName(name)) {
-        res.status(400).send({error: "Name is taken"});
+        res.status(400).send({error: "Name is taken."});
         return;
     }
     const newPerson = {id: newId, name, number };
     data.push(newPerson);
-    res.send();
+    res.send(data);
 })
 
 function getMatchingPerson(inputId){

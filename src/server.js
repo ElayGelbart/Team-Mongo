@@ -1,9 +1,11 @@
 const express = require('express');
-const app = express();
-const port = 3001;
 const data = require('./data');
 const morgan = require('morgan');
+const cors = require('cors')
+const app = express();
+const port = 3001;
 
+app.use(cors());
 app.use(express.json());
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
@@ -31,7 +33,7 @@ app.get('/api/persons/:id', (req, res) => {
     const matchingPerson = (getMatchingPerson(personId));
     matchingPerson
     ? res.send(matchingPerson)
-    : res.status(204).send({error: "Can't find person"});
+    : res.status(400).send({error: "Can't find person"});
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -39,7 +41,7 @@ app.delete('/api/persons/:id', (req, res) => {
     const matchingPerson = (getMatchingPerson(personId));
     matchingPerson
     ? data.splice(data.indexOf(matchingPerson),1)
-    : res.status(204).send({error: "Can't find person"})
+    : res.status(400).send({error: "Can't find person"})
     res.send();
 })
 

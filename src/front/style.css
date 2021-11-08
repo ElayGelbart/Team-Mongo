@@ -44,11 +44,10 @@
 #delete_btn { grid-area: 8 / 9 / 9 / 10; }
 #delete_result { grid-area: 9 / 7 / 10 / 10; }
 
-#new_id { grid-area: 12 / 2 / 13 / 4; }
-#new_name { grid-area: 12 / 4 / 13 / 6; }
-#new_number { grid-area: 12 / 6 / 13 / 8; }
-#submit_btn { grid-area: 12 / 8 / 13 / 9; }
-#new_result { grid-area: 13 / 3 / 14 / 7; }
+#new_name { grid-area: 12 / 3 / 13 / 5; }
+#new_number { grid-area: 12 / 5 / 13 / 7; }
+#submit_btn { grid-area: 12 / 7 / 13 / 8; }
+#new_result { grid-area: 13 / 4 / 14 / 7; }
 
 
 .results {

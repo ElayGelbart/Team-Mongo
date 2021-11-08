@@ -1,7 +1,8 @@
 const express = require('express');
 const data = require('./data');
 const morgan = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
+const { response } = require('express');
 const app = express();
 const port = 3001;
 
@@ -39,10 +40,13 @@ app.get('/api/persons/:id', (req, res) => {
 app.delete('/api/persons/:id', (req, res) => {
     const personId = Number(req.params.id);
     const matchingPerson = (getMatchingPerson(personId));
-    matchingPerson
-    ? data.splice(data.indexOf(matchingPerson),1)
-    : res.status(400).send({error: "Can't find person"})
-    res.send(data);
+    if(matchingPerson){
+        data.splice(data.indexOf(matchingPerson),1);
+        res.send(data);
+    }
+    else{
+        res.status(400).send({error: "Can't find person"});  
+    }
 })
 
 app.post('/api/persons', (req, res) => {

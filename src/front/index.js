@@ -72,18 +72,15 @@ async function deletePerson(){
  */
 function addPersonCheck(){
     const addPersonFields = document.querySelectorAll('.new_person');
-    const addPersonValues = [];
     for(let field of addPersonFields){
-        addPersonValues.push(field.value);
-    }
-    if(!addPersonValues.every(value => value !== '')){
-        displayError('Please fill every field.', 'add');
-        return 'missing';
+        if(!field.value){
+            displayError('Please fill every field.', 'add');
+            return 'missing';
+        }
     }
     return {
-        id: addPersonValues[0],
-        name: addPersonValues[1],
-        number: addPersonValues[2]
+        name: addPersonFields[0].value,
+        number: addPersonFields[1].value
     };
 }
 

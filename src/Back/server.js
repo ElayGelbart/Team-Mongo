@@ -12,9 +12,9 @@ if (process.argv.length < 3) {
 }
 
 const MongoPassword = process.argv[2]
-
-const MongoServerURL = `mongodb+srv://elaygelbart:${MongoPassword}@elaygelbart.qhmbq.mongodb.net/ElayGelbart?retryWrites=true&w=majority`;
-mongoose.connect(MongoServerURL);
+// for DEV
+// const MongoServerURL = `mongodb+srv://elaygelbart:${MongoPassword}@elaygelbart.qhmbq.mongodb.net/ElayGelbart?retryWrites=true&w=majority`;
+mongoose.connect(process.env.MONGO_URL);
 
 const personSchema = new mongoose.Schema({
   name: String,

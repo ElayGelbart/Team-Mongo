@@ -1,4 +1,5 @@
-// const HOST = "http://localhost:8080" for dev on local
+// for dev on local
+// const HOST = "http://localhost:8080"
 const HOST = "https://egmongodb.herokuapp.com"
 
 const getPhoneBook = async () => {
@@ -11,9 +12,9 @@ const getPhoneBook = async () => {
     const nameTD = document.createElement("td");
     const numberTD = document.createElement("td");
     idTH.setAttribute("scope", "row");
-    idTH.innerText = personObj.id;
+    idTH.innerText = personObj._id;
     nameTD.innerText = personObj.name;
-    numberTD.innerText = personObj.number
+    numberTD.innerText = personObj.phoneNumber
     tr.append(idTH, nameTD, numberTD);
     document.getElementById("phonebookTableBody").appendChild(tr);
   }
@@ -102,10 +103,10 @@ const getPersonFromPhonebook = async () => {
   </thead>
   <tbody>
     <tr>
-      <th scope="row">${personObj.id}</th>
+      <th scope="row">${personObj._id}</th>
       <td>${personObj.name}</td>
       <td>${personObj.number}</td>
-      <td><button onclick="deletePersonID(${personObj.id})">Delete Person</button></td>
+      <td><button class="btn btn-danger" onclick="deletePersonID('${personObj._id}')">Delete Person</button></td>
     </tr>
   </tbody>
   `
@@ -118,6 +119,7 @@ const getPersonFromPhonebook = async () => {
 
 const deletePersonID = async (PersonID) => {
   try {
+    console.log(PersonID);
     const response = await fetch(`${HOST}/api/persons/delete/${PersonID}`, {
       method: "DELETE"
     }).then((res) => {

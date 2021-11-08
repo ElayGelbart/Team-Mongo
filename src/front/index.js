@@ -3,6 +3,10 @@
 // import { displayPhonebook } from "./DOM";
 document.body.style.backgroundColor = 'cornsilk';
 const baseURL = 'http://localhost:3001/api/persons';
+
+/**
+ * Fetches phonebook data from server and displays it.
+ */
 async function getPhonebook(){
     try{
         const response = await axios.get(`${baseURL}`);
@@ -13,15 +17,31 @@ async function getPhonebook(){
         console.log(error.response.data);
     }
 }
-getPhonebook();
 
+getPhonebook();
 document.querySelector('#search_btn').addEventListener('click', searchPerson)
 document.querySelector('#submit_btn').addEventListener('click', addPerson)
 
-function searchPerson(){
-
+/**
+ * Uses the search field to search for a person.
+ * Will display person info if exists, error if not.
+ */
+async function searchPerson(){
+    const searchId = document.querySelector('#search_id').value;
+    if(!searchId) return;
+    try{
+        const response = await axios.get(`${baseURL}/${searchId}`);
+        const foundPerson = response.data
+        displayFoundPerson(foundPerson);
+    }
+    catch(error){
+        displaySearchError(error.response.data.error);
+    }
 }
 
+/**
+ * Checks that all fields are non-empty and displays the new person if they are.
+ */
 async function addPerson(){
     const addPersonValues = addPersonCheck();
     if(addPersonValues === 'missing') return;
@@ -58,7 +78,8 @@ function addPersonCheck(){
 
 ////////////DOM//////////////////////
 /**
- * Displays missing info message.
+ * Displays person adding error message.
+ * @param {string} message - Error message 
  */
 function displayAddPersonError(message){
     const addPersonResult = document.querySelector('#new_result');
@@ -89,6 +110,9 @@ function displayPhonebook(phonebook){
     }
 }
 
+/**
+ * Removes all existing entries from display.
+ */
 function emptyPhonebookDisplay(){
     const phonebook = document.querySelector('#phonebook');
     const phonebookEntries = document.querySelectorAll('.phonebook_entry');
@@ -97,3 +121,27 @@ function emptyPhonebookDisplay(){
     }
 }
 
+/**
+ * Displays found person information in the result field.
+ * @param {Object} person 
+ */
+function displayFoundPerson(person){
+    const { id, name, number } = person;
+    const searchResult = document.querySelector('#search_result');
+    searchResult.innerText = 
+    `ID: ${id}
+     Name: ${name}
+     Number: ${number}`;
+}
+
+/**
+ * Displays person searching error message.
+ * @param {string} message - Error message.
+ */
+function displaySearchError(message){
+    const searchPersonResult = document.querySelector('#search_result');
+    searchPersonResult.innerText = message;
+    setTimeout(()=>{
+        searchPersonResult.innerText = '';
+    }, 3000);
+}

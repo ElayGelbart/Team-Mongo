@@ -1,5 +1,4 @@
 function getMatchingPerson(inputId, data){
-    console.log(data);
     for(let person in data){
         if(data[person].id === inputId){
             return data[person];

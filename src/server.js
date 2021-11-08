@@ -42,7 +42,7 @@ app.delete('/api/persons/:id', (req, res) => {
     matchingPerson
     ? data.splice(data.indexOf(matchingPerson),1)
     : res.status(400).send({error: "Can't find person"})
-    res.send();
+    res.send(data);
 })
 
 app.post('/api/persons', (req, res) => {

@@ -21,6 +21,7 @@ async function getPhonebook(){
 getPhonebook();
 document.querySelector('#search_btn').addEventListener('click', searchPerson)
 document.querySelector('#submit_btn').addEventListener('click', addPerson)
+document.querySelector('#delete_btn').addEventListener('click', deletePerson);
 
 /**
  * Uses the search field to search for a person.
@@ -52,6 +53,30 @@ async function addPerson(){
     }
     catch(error){
         displayAddPersonError(error.response.data.error);
+    }
+}
+
+async function deletePerson(){
+    const deleteId = document.querySelector('#delete_id').value;
+    if(!deleteId) return;
+    try{
+       const response = await axios.delete(`${baseURL}/${deleteId}`);
+       const updatedPhonebook = response.data
+       displayPhonebook(updatedPhonebook);
+    }
+    catch(error){
+        displayDeleteError(error.response.data.error);
+    }
+
+    const searchId = document.querySelector('#search_id').value;
+    if(!searchId) return;
+    try{
+        const response = await axios.get(`${baseURL}/${searchId}`);
+        const foundPerson = response.data
+        displayFoundPerson(foundPerson);
+    }
+    catch(error){
+        displaySearchError(error.response.data.error);
     }
 }
 
@@ -140,6 +165,18 @@ function displayFoundPerson(person){
  */
 function displaySearchError(message){
     const searchPersonResult = document.querySelector('#search_result');
+    searchPersonResult.innerText = message;
+    setTimeout(()=>{
+        searchPersonResult.innerText = '';
+    }, 3000);
+}
+
+/**
+ * Displays person deleting error message.
+ * @param {string} message 
+ */
+function displayDeleteError(message){
+    const searchPersonResult = document.querySelector('#delete_result');
     searchPersonResult.innerText = message;
     setTimeout(()=>{
         searchPersonResult.innerText = '';

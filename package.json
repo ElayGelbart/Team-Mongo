@@ -7,10 +7,10 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "webpack": "^5.62.1",
-    "webpack-cli": "^4.9.1"
+    "webpack-cli": "^4.9.1",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "morgan": "^1.10.0",
     "nodemon": "^2.0.14"
   },
   "scripts": {

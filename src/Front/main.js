@@ -1,15 +1,16 @@
 // const HOST = "http://localhost:8080" for dev on local
 const HOST = "https://egmongodb.herokuapp.com"
+
 const getPhoneBook = async () => {
   const response = await fetch(`${HOST}/api/persons`);
   const responseArrayPerson = await response.json();
-  document.getElementById("phonebookTableBody").innerHTML = "";
+  document.getElementById("phonebookTableBody").innerHTML = ""; // reset Table
   for (let personObj of responseArrayPerson) {
     const tr = document.createElement("tr");
     const idTH = document.createElement("th");
     const nameTD = document.createElement("td");
     const numberTD = document.createElement("td");
-    idTH.setAttribute("scope", "row")
+    idTH.setAttribute("scope", "row");
     idTH.innerText = personObj.id;
     nameTD.innerText = personObj.name;
     numberTD.innerText = personObj.number
@@ -20,30 +21,34 @@ const getPhoneBook = async () => {
 getPhoneBook();
 
 const addPersonToServer = async () => {
-  const userNameValue = document.getElementById("validationCustomName").value;
-  const userPhoneNumberValue = document.getElementById("validationCustomPhoneNumber").value;
-  if (!validator.isAlpha(userNameValue) || !validator.isLength(userNameValue, { min: 3, max: 15 })) {
-    document.getElementById("validationCustomName").classList.add("is-invalid")
-    document.getElementById("nameValidationText").innerText = "Name Not Valid";
-    document.getElementById("nameValidationText").className = "invalid-feedback";
+  const userNameElem = document.getElementById("validationCustomName");
+  const userPhoneNumberElem = document.getElementById("validationCustomPhoneNumber");
+  const nameValdElem = document.getElementById("nameValidationText");
+  const phoneValdElem = document.getElementById("phoneValidationText");
+
+  if (!validator.isAlpha(userNameElem.value) || !validator.isLength(userNameElem.value, { min: 3, max: 15 })) {
+    userNameElem.classList.add("is-invalid")
+    nameValdElem.innerText = "Name Not Valid";
+    nameValdElem.className = "invalid-feedback";
     return;
   } else {
-    document.getElementById("validationCustomName").classList.remove("is-invalid")
-    document.getElementById("validationCustomName").classList.add("is-valid")
-    document.getElementById("nameValidationText").innerText = "Good Name";
-    document.getElementById("nameValidationText").className = "valid-feedback";
+    userNameElem.classList.remove("is-invalid")
+    userNameElem.classList.add("is-valid")
+    nameValdElem.innerText = "Good Name";
+    nameValdElem.className = "valid-feedback";
   }
-  if (!validator.isMobilePhone(userPhoneNumberValue)) {
-    document.getElementById("validationCustomPhoneNumber").classList.add("is-invalid")
-    document.getElementById("phoneValidationText").innerText = "Phone Not Valid";
-    document.getElementById("phoneValidationText").className = "invalid-feedback";
+  if (!validator.isMobilePhone(userPhoneNumberElem.value)) {
+    userPhoneNumberElem.classList.add("is-invalid")
+    phoneValdElem.innerText = "Phone Not Valid";
+    phoneValdElem.className = "invalid-feedback";
     return;
   } else {
-    document.getElementById("validationCustomPhoneNumber").classList.remove("is-invalid")
-    document.getElementById("validationCustomPhoneNumber").classList.add("is-valid")
-    document.getElementById("phoneValidationText").innerText = "Great Phone";
-    document.getElementById("phoneValidationText").className = "valid-feedback";
+    userPhoneNumberElem.classList.remove("is-invalid")
+    userPhoneNumberElem.classList.add("is-valid")
+    phoneValdElem.innerText = "Great Phone";
+    phoneValdElem.className = "valid-feedback";
   }
+
   try {
     const response = await fetch(`${HOST}/api/persons`, {
       method: "POST",
@@ -51,8 +56,8 @@ const addPersonToServer = async () => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: userNameValue,
-        number: userPhoneNumberValue
+        name: userNameElem.value,
+        number: userPhoneNumberElem.value
       })
     }).then((res) => {
       if (!res.ok) {
@@ -60,16 +65,19 @@ const addPersonToServer = async () => {
       }
       return res;
     });
-    alert("Added to phone book");
+    getPhoneBook(); // Update Phonebook
   } catch (err) {
-    document.getElementById("validationCustomName").classList.add("is-invalid")
-    document.getElementById("nameValidationText").innerText = "Name Taken";
-    document.getElementById("nameValidationText").className = "invalid-feedback";
+    userNameElem.classList.add("is-invalid")
+    nameValdElem.innerText = "Name Taken";
+    nameValdElem.className = "invalid-feedback";
   }
 }
 
 const getPersonFromPhonebook = async () => {
   const personID = document.getElementById("validationCustomPersonId").value;
+  if (!personID) {
+    return;
+  }
   try {
     const response = await fetch(`${HOST}/api/persons/${personID}`, {
       headers: {
@@ -101,9 +109,10 @@ const getPersonFromPhonebook = async () => {
     </tr>
   </tbody>
   `
-
+    document.getElementById("searchValidationText").innerText = "";
   } catch (err) {
-    alert("not here") // change
+    document.getElementById("validationCustomPersonId").classList.add("is-invalid")
+    document.getElementById("searchValidationText").innerText = "Person Not In Phonebook";
   }
 }
 
@@ -118,12 +127,13 @@ const deletePersonID = async (PersonID) => {
       return res;
     });
     document.getElementById("tablePersonData").innerHTML = "";
-    alert("deleted");
+    getPhoneBook();
   } catch (err) {
     console.log(err);
   }
 }
 
+//Eventlistners
 document.getElementById("getPhonebookBtn").addEventListener("click", getPhoneBook)
 document.getElementById("sendServerNewPerson").addEventListener("click", addPersonToServer)
 document.getElementById("sendSearchPersonIdBtn").addEventListener("click", getPersonFromPhonebook)

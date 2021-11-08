@@ -9,7 +9,13 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 })
 
-app.use(morgan('tiny'));
+morgan.token("data", (req) => {
+    return JSON.stringify(req.body)
+});
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] :data', {
+    skip: function (req, res) { return req.method !== "POST" }
+}));
+  
 
 app.get('/api/persons', (req, res) => {
     res.send(data);

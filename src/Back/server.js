@@ -7,13 +7,18 @@ const port = 8080;
 app.use(cors());
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-app.use(morgan('dev', {
+morgan.token("data", (req) => {
+  return JSON.stringify(req.body)
+});
+app.use(morgan(':method :url :status :response-time ms - :res[content-length] :data', {
   skip: function (req, res) { return req.method !== "POST" }
-}));
+}
+));
 app.use("/", express.static(`${__dirname}/../Front`));
 app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/../Front/index.html`);
 });
+
 const phonebook = [
   {
     "id": 1,

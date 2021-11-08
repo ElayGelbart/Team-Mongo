@@ -6,12 +6,6 @@ const mongoose = require("mongoose");
 const app = express();
 const port = process.env.PORT || 8080;
 
-if (process.argv.length < 3) {
-  console.log('Please provide the password as an argument: node mongo.js <password>')
-  process.exit(1)
-}
-
-const MongoPassword = process.argv[2]
 // for DEV
 // const MongoServerURL = `mongodb+srv://elaygelbart:${MongoPassword}@elaygelbart.qhmbq.mongodb.net/ElayGelbart?retryWrites=true&w=majority`;
 const MongoServerURL = process.env.MONGO_URL;

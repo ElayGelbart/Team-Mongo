@@ -4,9 +4,65 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/agenda.css">
     <title>Phone Book</title>
 </head>
 <body>
-    <h1> Professional PhoneBook</h1>
+    
+    <div id="layout" class="x-borders">
+       
+        </header>
+        <div id="top-menu">
+            <div>
+                <h1 id="heading"> Professional PhoneBook</h1>
+                <div id="secondary-toggle" class="genericon genericon-menu">Widgets</div>
+            </div>
+        </div>
+    
+        <div id="content-wrapper">
+           
+    
+            <div id="content">
+                <div id="breadcrumb">Phone Book</div>
+    
+                <form class="add-form" action="" onsubmit="return false" method="post">
+    
+                    <div style="padding-bottom: 5px">
+                        <button id="displayPhoneBook"></button>
+                    </div>
+                    <table id="phone-book">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Phone Number</th>
+                            <th width="100">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+    
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td><input type="text" required name="firstName" placeholder="Enter Name..."></td>
+                                <td><input type="text" name="lastName" placeholder="Enter Phone Number..."></td>
+                                <td>
+                                    <button type="submit" title="Save" id="submit">&#128190;</button>
+                                    <button type="reset" title="Cancel">&#10006;</button>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+    
+            <div class="clear"></div>
+        </div>
+    
+        <footer>
+            <p>Made By Eithan Refaely &#10228; Full-Stack Web Developer</p>
+        </footer>
+    </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require('cors')
+const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require("mongoose");
 
@@ -17,26 +17,10 @@ const MongoServerURL = `mongodb+srv://elaygelbart:${MongoPassword}@elaygelbart.q
 mongoose.connect(MongoServerURL);
 
 const personSchema = new mongoose.Schema({
-  id: Number,
   name: String,
   phoneNumber: String,
 });
 const Person = mongoose.model('Person', personSchema);
-
-const person = new Person({
-  id: 3,
-  name: "shlomo",
-  phoneNumber: "0507642925",
-});
-Person.find({ id: 5 }).then(result => {
-  result.forEach(person => {
-    console.log(person)
-  })
-});
-person.save().then(result => {
-  console.log('person saved!')
-  mongoose.connection.close()
-});
 
 app.use(cors());
 app.use(express.json()) // for parsing application/json
@@ -55,62 +39,38 @@ app.get("/", (req, res) => {
   res.sendFile(`${__dirname}/../Front/index.html`);
 });
 
-const phonebook = [ // later will be DB
-  {
-    "id": 1,
-    "name": "Arto Hellas",
-    "number": "040-123456"
-  },
-  {
-    "id": 2,
-    "name": "Ada Lovelace",
-    "number": "39-44-5323523"
-  },
-  {
-    "id": 3,
-    "name": "Dan Abramov",
-    "number": "12-43-234345"
-  },
-  {
-    "id": 4,
-    "name": "Mary Poppendieck",
-    "number": "39-23-6423122"
-  }
-];
-
-app.get("/api/persons", (req, res) => {
+app.get("/api/persons", async (req, res) => {
+  const phonebook = await Person.find({});
   res.send(phonebook);
 });
 
-app.get("/api/persons/:id", (req, res, next) => {
-  for (let phoneObj of phonebook) {
-    if (phoneObj.id == req.params.id) {
-      res.send(phoneObj);
-      return;
-    }
+app.get("/api/persons/:id", async (req, res, next) => {
+  try {
+    const selectedPerson = await Person.find({ _id: req.params.id });
+    res.send(selectedPerson[0]);
+  } catch (err) {
+    next({ status: 404, msg: 'Person not found' });
   }
-  next({ status: 404, msg: 'Person not found' })
 });
 
-app.delete("/api/persons/delete/:id", (req, res, next) => {
-  for (let i = 0; i < phonebook.length; i++) {
-    if (phonebook[i].id == req.params.id) {
-      phonebook.splice(i, 1);
-      res.send("selected person has been deleted")
-      return
-    }
+app.delete("/api/persons/delete/:id", async (req, res, next) => {
+  const phonebook = await Person.find({});
+  try {
+    const response = await Person.findByIdAndRemove(req.params.id)
+    res.send("selected person has been deleted")
+  } catch (err) {
+    next({ status: 404, msg: 'Person not found' })
   }
-  next({ status: 404, msg: 'Person not found' })
 });
 
-app.post("/api/persons", (req, res, next) => {
+app.post("/api/persons", async (req, res, next) => {
   const userName = req.body.name;
   const userNumber = req.body.number;
-  const userId = Math.floor(Math.random() * (1000000000 - 100 + 1) + 100);
   if (!userName || !userNumber) { // Check Falsy
     next({ status: 403, msg: 'must be number and name' })
     return;
   }
+  const phonebook = await Person.find({});
   for (let phoneObj of phonebook) {
     if (phoneObj.name == userName) {
       next({ status: 403, msg: 'name must be unique' });
@@ -118,11 +78,12 @@ app.post("/api/persons", (req, res, next) => {
     }
   }
   const userPhoneObj = {
-    id: userId,
     name: userName,
-    number: userNumber
+    phoneNumber: userNumber
   };
-  phonebook.push(userPhoneObj);
+  const person = new Person(userPhoneObj);
+  await person.save();
+  console.log("person saved");
   res.send("added to phone book");
 });
 

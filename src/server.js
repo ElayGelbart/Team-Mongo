@@ -5,10 +5,10 @@ const morgan = require('morgan');
 const { data } = require("../data")
 const path = require("path");
 
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true} ))
-app.use(cors());
+
 app.use('/', express.static(path.resolve("./front")));               // serve main path as static dir
 
 
@@ -64,7 +64,5 @@ app.post("/api/persons", (req, res) => {
             res.status(400).json({ error: 'This Name is Taken' });
         }
 })
-
-
 
 app.listen(process.env.PORT || 3001);

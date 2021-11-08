@@ -20,3 +20,35 @@
 #phonebook .phonebook_entry:nth-child(odd) td {
     background-color: #BBCEE0;
 }
+#phonebook .phonebook_entry:nth-child(even) td {
+    background-color: white;
+}
+
+#page {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    background-color: cornsilk;
+}
+
+#phonebook { grid-area: 2 / 2 / 7 / 10; }
+#search_id { grid-area: 8 / 4 / 9 / 6; }
+#search_btn { grid-area: 8 / 6 / 9 / 8; }
+#search_result { grid-area: 9 / 5 / 11 / 7; }
+#new_id { grid-area: 12 / 2 / 13 / 4; }
+#new_name { grid-area: 12 / 4 / 13 / 6; }
+#new_number { grid-area: 12 / 6 / 13 / 8; }
+#submit_btn { grid-area: 12 / 8 / 13 / 10; }
+#new_result { grid-area: 13 / 4 / 14 / 8; }
+
+#search_result {
+    border: 1px solid black;
+}
+
+#new_result {
+    border: 1px solid black;
+}

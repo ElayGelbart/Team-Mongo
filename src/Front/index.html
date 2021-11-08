@@ -17,12 +17,12 @@
   <title>Phone Book</title>
 </head>
 
-<body class="text-center">
+<body class="text-center bg-warning text-dark d-md-flex flex-column align-items-center">
   <header>
     <h1>Phone Book 4 U</h1>
   </header>
   <main>
-    <div id="PhoneBookDiv">
+    <div id="PhoneBookDiv" class="container-xl bg-info bg-gradient rounded m-5">
       <table class="table table-striped">
         <thead>
           <tr>
@@ -44,9 +44,10 @@
           </tr>
         </tbody>
       </table>
+      <button class="btn btn-primary m-3" id="getPhonebookBtn">Update PhoneBook</button>
     </div>
-    <button class="btn btn-success m-3" id="getPhonebookBtn">Update PhoneBook</button>
-    <div id="AddPersonDiv">
+    <div id="AddPersonDiv" class="container bg-info bg-gradient rounded m-5 p-5">
+      <h2>Add New Person To Phonebook</h2>
       <form class="row g-3">
         <div class="col-md-4">
           <label for="validationCustom01" class="form-label">Full Name</label>
@@ -58,17 +59,18 @@
           <input type="text" class="form-control" id="validationCustomPhoneNumber" placeholder="Phone Number" required>
           <div id="phoneValidationText"></div>
         </div>
-    </div>
-    <div class="col-12">
-      <button id="sendServerNewPerson" class="btn btn-primary" type="button">Add to PhoneBook</button>
+        <div class="col-12">
+          <button id="sendServerNewPerson" class="btn btn-primary m-3" type="button">Add to PhoneBook</button>
+        </div>
     </div>
     </form>
-    <div id="GetPersonDiv" class="m-4">
+    <div id="GetPersonDiv" class="container bg-info bg-gradient rounded m-5 p-5">
+      <h2>Search Person In Phonebook</h2>
       <p>Search For(ID):<input type="number" id="validationCustomPersonId" placeholder="Person ID" required></p>
       <button id="sendSearchPersonIdBtn" class="btn btn-primary" type="button">Get Person Data</button>
-    </div>
-    <div id="PersonDataDiv">
-      <table id="tablePersonData" class="table table-striped">
+      <div id="PersonDataDiv">
+        <table id="tablePersonData" class="table table-striped">
+      </div>
     </div>
   </main>
 </body>

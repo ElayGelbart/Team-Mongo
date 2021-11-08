@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require('cors')
 const morgan = require('morgan');
 const app = express();
-const port = 8080;
+const port = process.env.PORT || 8080;
 
 app.use(cors());
 app.use(express.json()) // for parsing application/json
@@ -110,6 +110,6 @@ app.use(ErrorHandler = (err, req, res, next) => {
   }
 })
 
-app.listen(process.env.PORT || port, () => {
+app.listen(port, () => {
   console.log(`server is on port ${port}`);
 });

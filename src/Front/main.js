@@ -105,7 +105,7 @@ const getPersonFromPhonebook = async () => {
     <tr>
       <th scope="row">${personObj._id}</th>
       <td>${personObj.name}</td>
-      <td>${personObj.number}</td>
+      <td>${personObj.phoneNumber}</td>
       <td><button class="btn btn-danger" onclick="deletePersonID('${personObj._id}')">Delete Person</button></td>
     </tr>
   </tbody>

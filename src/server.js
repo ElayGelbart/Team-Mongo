@@ -1,8 +1,8 @@
 // server code
 const express = require('express');
 const morgan = require('morgan')
-const app = express();
 const data = require("./database")
+const app = express();
 const PORT = 3001;
 
 app.listen(PORT, ()=>{
@@ -37,21 +37,19 @@ app.get("/api/persons/:id", function (req,res){
             return
         }
     }
-    res.sendStatus(404);
+    res.status(404).send("Cant find person");
 })
 
 app.delete("/api/persons/:id", function (req,res){
     const id = req.params.id;
     for (let i =0; i<data.data.length; i++){
         if(+data.data[i].id === +id){
-            console.log(data.data);
             data.data.splice(i,1);
             res.send("Deleted successfully!");
-            console.log(data.data);
             return
         }
     }
-    res.sendStatus(404);
+    res.status(404).send("Cant find person");
 })
 
 app.post("/api/persons", function (req,res){

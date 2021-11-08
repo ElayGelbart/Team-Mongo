@@ -5,10 +5,12 @@ const morgan = require('morgan');
 const { data } = require("../data")
 const path = require("path");
 
-app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true} ))
+app.use(cors());
 app.use('/', express.static(path.resolve("./front")));               // serve main path as static dir
+
 
 morgan.token('body', (req, res) => JSON.stringify(req.body));                               
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :body'));

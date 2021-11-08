@@ -18,14 +18,8 @@ async function getPhonebook(){
     }
 }
 
-getPhonebook();
-document.querySelector('#search_btn').addEventListener('click', searchPerson)
-document.querySelector('#submit_btn').addEventListener('click', addPerson)
-document.querySelector('#delete_btn').addEventListener('click', deletePerson);
-
 /**
- * Uses the search field to search for a person.
- * Will display person info if exists, error if not.
+ * Uses the search field to search for a person. Will display person info if exists.
  */
 async function searchPerson(){
     const searchId = document.querySelector('#search_id').value;
@@ -36,12 +30,12 @@ async function searchPerson(){
         displayFoundPerson(foundPerson);
     }
     catch(error){
-        displaySearchError(error.response.data.error);
+        displayError(error.response.data.error, 'search');
     }
 }
 
 /**
- * Checks that all fields are non-empty and displays the new person if they are.
+ * Adds a new person to the phonebook if the needed info fields are non-empty.
  */
 async function addPerson(){
     const addPersonValues = addPersonCheck();
@@ -52,10 +46,13 @@ async function addPerson(){
         displayPhonebook(response.data);
     }
     catch(error){
-        displayAddPersonError(error.response.data.error);
+        displayError(error.response.data.error, 'add');
     }
 }
 
+/**
+ * Deletes a person from the phonebook if it exists.
+ */
 async function deletePerson(){
     const deleteId = document.querySelector('#delete_id').value;
     if(!deleteId) return;
@@ -65,18 +62,7 @@ async function deletePerson(){
        displayPhonebook(updatedPhonebook);
     }
     catch(error){
-        displayDeleteError(error.response.data.error);
-    }
-
-    const searchId = document.querySelector('#search_id').value;
-    if(!searchId) return;
-    try{
-        const response = await axios.get(`${baseURL}/${searchId}`);
-        const foundPerson = response.data
-        displayFoundPerson(foundPerson);
-    }
-    catch(error){
-        displaySearchError(error.response.data.error);
+        displayError(error.response.data.error, 'delete');
     }
 }
 
@@ -91,7 +77,7 @@ function addPersonCheck(){
         addPersonValues.push(field.value);
     }
     if(!addPersonValues.every(value => value !== '')){
-        displayAddPersonError('Please fill every field.');    
+        displayError('Please fill every field.', 'add');
         return 'missing';
     }
     return {
@@ -101,18 +87,13 @@ function addPersonCheck(){
     };
 }
 
+getPhonebook();
+document.querySelector('#search_btn').addEventListener('click', searchPerson)
+document.querySelector('#submit_btn').addEventListener('click', addPerson)
+document.querySelector('#delete_btn').addEventListener('click', deletePerson);
+
 ////////////DOM//////////////////////
-/**
- * Displays person adding error message.
- * @param {string} message - Error message 
- */
-function displayAddPersonError(message){
-    const addPersonResult = document.querySelector('#new_result');
-    addPersonResult.innerText = message;
-    setTimeout(()=>{
-        addPersonResult.innerText = '';
-    }, 3000);
-}
+
 /**
  * Displays all entries in the phonebook table.
  * @param {Array} phonebook - All entries saved in the phonebook
@@ -153,6 +134,7 @@ function emptyPhonebookDisplay(){
 function displayFoundPerson(person){
     const { id, name, number } = person;
     const searchResult = document.querySelector('#search_result');
+    searchResult.style.visibility = 'visible';
     searchResult.innerText = 
     `ID: ${id}
      Name: ${name}
@@ -160,25 +142,29 @@ function displayFoundPerson(person){
 }
 
 /**
- * Displays person searching error message.
- * @param {string} message - Error message.
+ * Displays an error for 3 seconds in one of the result fields.
+ * @param {string} message - Error message to display.
+ * @param {string} field - Which one of the result fields.
  */
-function displaySearchError(message){
-    const searchPersonResult = document.querySelector('#search_result');
-    searchPersonResult.innerText = message;
+function displayError(message, field){
+    let errorField;
+    switch (field) {
+        case 'add':
+            errorField = document.querySelector('#new_result')
+            break;
+        case 'search':
+            errorField = document.querySelector('#search_result')
+            break;
+        case 'delete':
+            errorField = document.querySelector('#delete_result')
+            break;
+        default:
+            return;
+    }
+    errorField.style.visibility = "visible";
+    errorField.innerText = message;
     setTimeout(()=>{
-        searchPersonResult.innerText = '';
-    }, 3000);
-}
-
-/**
- * Displays person deleting error message.
- * @param {string} message 
- */
-function displayDeleteError(message){
-    const searchPersonResult = document.querySelector('#delete_result');
-    searchPersonResult.innerText = message;
-    setTimeout(()=>{
-        searchPersonResult.innerText = '';
+        errorField.innerText = '';
+        errorField.style.visibility = "hidden";
     }, 3000);
 }

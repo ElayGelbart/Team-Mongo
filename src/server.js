@@ -9,7 +9,7 @@ app.listen(PORT, ()=>{
     console.log("running...");
 });
 app.use(express.json()) ;
-// app.use(express.urlencoded({ extended: true }));
+
 morgan.token("data", (req) =>{
     return JSON.stringify(req.body);
 })
@@ -62,7 +62,7 @@ app.post("/api/persons", function (req,res){
     let idNumber = 0;
     for(let i = 0; i < data.data.length; i++){
         if(data.data[i].name === newContactName){
-            res.status(403).send("That name is already exists in the phonebook");
+            res.status(403).send("That name is already exists in your phonebook");
             return;
         }
         if(data.data[i].id > idNumber){

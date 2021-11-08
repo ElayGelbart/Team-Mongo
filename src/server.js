@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const { getMatchingPerson, checkTakenName } = require('./helpers')
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +18,12 @@ morgan.token("data", (req) => {
 app.use(morgan(':method :url :status :response-time ms - :res[content-length] :data', {
     skip: function (req, res) { return req.method !== "POST" }
 }));
-  
+
+app.use('/', express.static(`${__dirname}/front`));
+app.use('/', express.static(`${__dirname}/../dist`));
+app.get('/', (req, res) => {
+    res.sendFile(`${__dirname}/front/index.html`);
+})
 
 app.get('/api/persons', (req, res) => {
     res.send(data);

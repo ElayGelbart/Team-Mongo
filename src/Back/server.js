@@ -1,8 +1,42 @@
 const express = require("express");
 const cors = require('cors')
 const morgan = require('morgan');
+const mongoose = require("mongoose");
+
 const app = express();
 const port = process.env.PORT || 8080;
+
+if (process.argv.length < 3) {
+  console.log('Please provide the password as an argument: node mongo.js <password>')
+  process.exit(1)
+}
+
+const MongoPassword = process.argv[2]
+
+const MongoServerURL = `mongodb+srv://elaygelbart:${MongoPassword}@elaygelbart.qhmbq.mongodb.net/ElayGelbart?retryWrites=true&w=majority`;
+mongoose.connect(MongoServerURL);
+
+const personSchema = new mongoose.Schema({
+  id: Number,
+  name: String,
+  phoneNumber: String,
+});
+const Person = mongoose.model('Person', personSchema);
+
+const person = new Person({
+  id: 3,
+  name: "shlomo",
+  phoneNumber: "0507642925",
+});
+Person.find({ id: 5 }).then(result => {
+  result.forEach(person => {
+    console.log(person)
+  })
+});
+person.save().then(result => {
+  console.log('person saved!')
+  mongoose.connection.close()
+});
 
 app.use(cors());
 app.use(express.json()) // for parsing application/json

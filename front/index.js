@@ -1,7 +1,7 @@
 const displayBookBtn = document.getElementById("displayPhoneBook");
 
 const getDataFromServer = async () => {
-   const response = await axios.get("http://localhost:3001/api/persons");
+   const response = await axios.get("https://fierce-earth-06756.herokuapp.com/api/persons");
    console.log(response.data);
 }
 

@@ -65,4 +65,6 @@ app.post("/api/persons", (req, res) => {
         }
 })
 
-app.listen(process.env.PORT || 3001);
+app.listen(process.env.PORT || 3001, () => {
+    console.log(`Express is working on port 3001`);
+  });

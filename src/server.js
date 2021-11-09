@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../frontend")))
 
+app.use("/user", userrouter)
 
 app.get("/" , (req,res)=>{
     res.sendFile("../frontend/index.html")

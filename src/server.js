@@ -8,9 +8,9 @@ const port = process.env.PORT || 3001;
 app.listen(port, ()=>{
     console.log("running...");
 });
-app.use(express.json("../frontend/index.html"));
+app.use(express.json());
 
-app.use(express.static())
+app.use(express.static("../frontend/index.html"));
 
 morgan.token("data", (req) =>{
     return JSON.stringify(req.body);

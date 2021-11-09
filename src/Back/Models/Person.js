@@ -5,8 +5,10 @@ const personSchema = new mongoose.Schema({
     minLength: 3,
     maxLength: 20
   },
-  phoneNumber: String,
-  minLength: 10,
-  maxLength: 40
+  phoneNumber: {
+    type: String,
+    minLength: 10,
+    maxLength: 40
+  }
 });
 module.exports = mongoose.model('Person', personSchema);

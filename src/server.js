@@ -8,7 +8,8 @@ const PORT = 3001;
 app.listen(PORT, ()=>{
     console.log("running...");
 });
-app.use(express.json()) ;
+app.use(express.json());
+
 
 morgan.token("data", (req) =>{
     return JSON.stringify(req.body);

@@ -40,7 +40,7 @@ const createBtn = (personId) => {
 }
 
 const deletePerson = async (personId) => {
-    const response = await axios.delete(`https://fierce-earth-06756.herokuapp.com//api/persons/:${personId}`)
+    const response = await axios.delete(`https://fierce-earth-06756.herokuapp.com/api/persons/:${personId}`)
 
 }
 

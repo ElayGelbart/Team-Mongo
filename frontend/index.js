@@ -1,4 +1,4 @@
-const myAPI = "https://phonebookshaked.herokuapp.com/"
+const myAPI = "https://phonebookshaked.herokuapp.com"
 
 
 const fName = document.getElementById("fname");

@@ -3,9 +3,9 @@ const express = require('express');
 const morgan = require('morgan')
 const data = require("./database")
 const app = express();
-const PORT = 3001;
+const port = process.env.PORT || 3001;
 
-app.listen(PORT, ()=>{
+app.listen(port, ()=>{
     console.log("running...");
 });
 app.use(express.json());

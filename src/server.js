@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const { data } = require("../data")
 const path = require("path");
 
+const { errorHandler } = require("./handlers/errorHandler")
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true} ))
@@ -28,29 +30,28 @@ app.get("/info", (req, res) => {
                 <p>Last Sync: ${new Date().toLocaleString()} </p>`)
 });
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
     const personObj = data.find(person => person.id === Number(req.params.id));                                     // Array.find() - find one person Object with requested id or return undefined
-    personObj ? res.send(personObj) : res.status(400).json({ error: 'We didnt find a person with that ID' });       // 204 status didnt transfer the error object - not sure why
+    personObj ? res.send(personObj) : next(400);   
 });
 
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res, next) => {
+    console.log("in here");
     const personObj = data.find(person => person.id === Number(req.params.id));
     if(!personObj) {
         data.splice(data.indexOf(personObj), 1)
         res.send("Deleted Successfully");
         }
         else {
-            res.status(400).json({ error: 'We didnt find a person with that ID' });
+            next(400);
         }
 })
 
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
     const { name, number } = req.body;
     if(!name || !number){
-        res.status(400).json({                         
-            error: 'You must provide a Name and Number' 
-          });
+        next(422)
     }
 
     const personByName = data.find(person => person.name === name);
@@ -61,9 +62,12 @@ app.post("/api/persons", (req, res) => {
         return;
         }
         else {
-            res.status(400).json({ error: 'This Name is Taken' });
+            console.log("im here");
+            next(406);
         }
 })
+
+app.use(errorHandler);
 
 const server = app.listen(process.env.PORT || 3001, () => {
     const port = server.address().port;

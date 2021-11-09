@@ -28,3 +28,7 @@ app.get("/", (req, res) => {
 app.use("/api/persons", personsRouter);
 
 app.use(ErrorHandler);
+
+app.listen(port, () => {
+  console.log(`server is on port ${port}`);
+});

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const Person = require(`${__dirname}/../Models/Person`);
 router.get("/", async (req, res) => {
   const phonebook = await Person.find({});
   res.send(phonebook);

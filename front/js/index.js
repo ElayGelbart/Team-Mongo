@@ -35,7 +35,7 @@ const createTd = (personData) => {
 const createBtn = (personId) => {
     const cell = document.createElement("button");
     cell.textContent = "Delete";
-    cell.onclick = `deletePerson(${personId})`
+    cell.onclick = deletePerson(personId);
     return cell;
 }
 

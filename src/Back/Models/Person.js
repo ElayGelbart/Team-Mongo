@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const personSchema = new mongoose.Schema({
-  name: {
-    type: String,
-  },
-  phoneNumber: {
-    type: String,
-  }
+  name: String,
+  phoneNumber: String
 });
 module.exports = mongoose.model('Person', personSchema);

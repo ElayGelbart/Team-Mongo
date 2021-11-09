@@ -1,6 +1,7 @@
 // server code
 const express = require('express');
 const morgan = require('morgan');
+const path = require('path')
 const data = require("./database");
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,7 +11,8 @@ app.listen(port, ()=>{
 });
 app.use(express.json());
 
-app.use("/" , express.static("../frontend"));
+app.use(express.static(path.join(__dirname, "../frontend")))
+
 
 app.get("/" , (req,res)=>{
     res.sendFile("../frontend/index.html")

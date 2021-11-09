@@ -39,9 +39,5 @@ const createBtn = (personId) => {
     return cell;
 }
 
-const deletePerson = async (personId) => {
-    const response = await axios.delete(`https://fierce-earth-06756.herokuapp.com/api/persons/:${personId}`)
-
-}
 
 getDataFromServer();

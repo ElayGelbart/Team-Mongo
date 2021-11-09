@@ -1,7 +1,7 @@
 // server code
 const express = require('express');
-const morgan = require('morgan')
-const data = require("./database")
+const morgan = require('morgan');
+const data = require("./database");
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -10,7 +10,12 @@ app.listen(port, ()=>{
 });
 app.use(express.json());
 
-app.use(express.static("../frontend/index.html"));
+app.use("/" , express.static("../frontend"));
+
+app.get("/" , (req,res)=>{
+    res.sendFile("../frontend/index.html")
+});
+
 
 morgan.token("data", (req) =>{
     return JSON.stringify(req.body);

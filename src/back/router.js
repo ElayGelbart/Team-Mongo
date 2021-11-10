@@ -14,26 +14,22 @@ router.get('/', (req, res) => {
 
 router.get('/api/persons', (req, res) => {
     Person.find({}).then(result => {
-        console.log('phonebook:');
-        result.forEach(person => {
-            console.log(person.name, person.number);
-        })
-        mongoose.connection.close();
+        res.send(result);
     })
-    res.send(data);
 })
 
 router.get('/info', (req, res) => {
-    const phonebookEntries = data.length;
-    res.send(`Phonebook has info for ${phonebookEntries} people. \n ${Date()}`);
+    Person.find({}).then(result => {
+        res.send(`Phonebook has info for ${result.length} people. \n ${Date()}`);
+    })
 })
 
 router.get('/api/persons/:id', (req, res) => {
-    const personId = Number(req.params.id);
-    const matchingPerson = (getMatchingPerson(personId, data));
-    matchingPerson
-    ? res.send(matchingPerson)
-    : res.status(400).send({error: "Can't find person"});
+    const personId = req.params.id;
+    Person.find({ _id: personId }).then(result => {
+        res.send(result[0]);
+    })
+    .catch(error => console.log(error))
 })
 
 router.delete('/api/persons/:id', (req, res) => {

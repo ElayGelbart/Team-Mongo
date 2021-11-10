@@ -13,9 +13,13 @@ app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 })
 
-mongoose.connect(process.env.DATABASE, ()=>{
-    console.log('DB connected');
-});
+mongoose
+    .connect(process.env.DATABASE, {
+        useNewUrlParser: true
+    })
+    .then(()=>{
+        console.log('DB connected');
+    });
 
 morgan.token("data", (req) => {
     return JSON.stringify(req.body)

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <!-- JavaScript Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/validator@latest/validator.min.js"></script>
+  <title>Phone Book</title>
+</head>
+
+<body class="text-center bg-warning text-dark d-md-flex flex-column align-items-center">
+  <header>
+    <h1>Phone Book 4 U</h1>
+  </header>
+  <main>
+    <div id="PhoneBookDiv" class="container-xl bg-info bg-gradient rounded m-5">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Phone</th>
+          </tr>
+        </thead>
+        <tbody id="phonebookTableBody">
+          <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>Otto</td>
+          </tr>
+          <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>Thornton</td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-primary m-3" id="getPhonebookBtn">Update PhoneBook</button>
+    </div>
+    <div id="AddPersonDiv" class="container bg-info bg-gradient rounded m-5 p-5">
+      <h2>Add New Person To Phonebook</h2>
+      <form class="row g-3">
+        <div class="col-md-4">
+          <label for="validationCustom01" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="validationCustomName" placeholder="Elay Gelbart" required>
+          <div id="nameValidationText"></div>
+        </div>
+        <div class="col-md-4">
+          <label for="validationCustom02" class="form-label">Phone Number</label>
+          <input type="text" class="form-control" id="validationCustomPhoneNumber" placeholder="050 2302 233" required>
+          <div id="phoneValidationText"></div>
+        </div>
+        <div class="col-12">
+          <button id="sendServerNewPerson" class="btn btn-primary m-3" type="button">Add to PhoneBook</button>
+        </div>
+    </div>
+    </form>
+    <div id="GetPersonDiv" class="container bg-info bg-gradient rounded m-5 p-5">
+      <h2>Search Person In Phonebook</h2>
+      <div class="m-3">Search For(ID):<input type="text" id="validationCustomPersonId" placeholder="Person ID" required>
+        <div id="searchValidationText" class="invalid-feedback"></div>
+      </div>
+      <button id="sendSearchPersonIdBtn" class="btn btn-primary" type="button">Get Person Data</button>
+      <div id="PersonDataDiv">
+        <table id="tablePersonData" class="table table-striped">
+      </div>
+    </div>
+  </main>
+</body>
+
+</html>

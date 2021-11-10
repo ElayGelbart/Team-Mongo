@@ -1,6 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
+const mongoose = require('mongoose');
 const router = require('./router');
 const app = express();
 const port = process.env.PORT || 3001;
@@ -10,6 +12,10 @@ app.use(express.json());
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 })
+
+mongoose.connect(process.env.DATABASE, ()=>{
+    console.log('DB connected');
+});
 
 morgan.token("data", (req) => {
     return JSON.stringify(req.body)

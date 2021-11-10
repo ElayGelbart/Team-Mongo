@@ -1,5 +1,7 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const data = require('./data');
+const Person = require('./model');
 const { getMatchingPerson, checkTakenName } = require('./helpers')
 const router = express.Router();
 
@@ -11,6 +13,13 @@ router.get('/', (req, res) => {
 })
 
 router.get('/api/persons', (req, res) => {
+    Person.find({}).then(result => {
+        console.log('phonebook:');
+        result.forEach(person => {
+            console.log(person.name, person.number);
+        })
+        mongoose.connection.close();
+    })
     res.send(data);
 })
 

@@ -1,7 +1,8 @@
 import * as dom from './DOM';
 
 document.body.style.backgroundColor = 'cornsilk';
-const baseURL = 'https://ehood-phonebook.herokuapp.com/api/persons';
+const baseURL = 'https://localhost:3001';
+// const baseURL = 'https://ehood-phonebook.herokuapp.com/api/persons';
 
 /**
  * Fetches phonebook data from server and displays it.

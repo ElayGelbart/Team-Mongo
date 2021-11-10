@@ -29,7 +29,7 @@ const addPersonToServer = async () => {
   const nameValdElem = document.getElementById('nameValidationText')
   const phoneValdElem = document.getElementById('phoneValidationText')
 
-  if (!validator.isAlpha(userNameElem.value) || !validator.isLength(userNameElem.value, { min: 3, max: 15 })) {
+  if (!validator.isAlpha(userNameElem.value.replace(/\s/, '')) || !validator.isLength(userNameElem.value, { min: 3, max: 30 })) {
     userNameElem.classList.add('is-invalid')
     nameValdElem.innerText = 'Name Not Valid'
     nameValdElem.className = 'invalid-feedback'

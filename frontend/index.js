@@ -45,6 +45,7 @@ addBtn.addEventListener("click", async function(){
 
 showAll.addEventListener("click", async function(){
     await startPage()
+    console.log("in front show");
     showAll.style.visibility ="hidden";
     hideAll.style.visibility = "visible";
 })
@@ -98,7 +99,8 @@ function makeFavorite(element){
 
 async function startPage(){
     const data = await axios.get(`${myAPI}/api/persons`);
-    for(let i = 0 ; i < data.length ; i++){
-        addContact(data[i].name, data[i].number)
+    console.log(data);
+    for(let i = 0 ; i < data.data.length ; i++){
+        addContact(data.data[i].name, data.data[i].number)
     }
 }

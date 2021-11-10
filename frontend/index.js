@@ -29,10 +29,12 @@ addBtn.addEventListener("click", async function(){
         return;
     }
     try {
+        console.log("before axios");
         const response = await axios.post(`${myAPI}/api/persons`, {
             "name" : fullName,
             "number" : phoneNumber  
         })
+        console.log("after axios",response);
         errormsg.innerText = response.data;
         setTimeout(()=>{errormsg.innerText = ""}, 3000);
         addContact(fullName, phoneNumber);

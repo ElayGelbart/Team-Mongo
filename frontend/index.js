@@ -1,5 +1,5 @@
-// const myAPI = "https://phonebookshaked.herokuapp.com"
-const myAPI = "http://localhost:3001"
+const myAPI = "https://phonebookshaked.herokuapp.com"
+// const myAPI = "http://localhost:3001"
 
 const fName = document.getElementById("fname");
 const lName = document.getElementById("lname");

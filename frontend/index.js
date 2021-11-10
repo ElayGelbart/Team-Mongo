@@ -1,5 +1,5 @@
-const myAPI = "https://phonebookshaked.herokuapp.com"
-
+// const myAPI = "https://phonebookshaked.herokuapp.com"
+const myAPI = "http://localhost:3001"
 
 const fName = document.getElementById("fname");
 const lName = document.getElementById("lname");
@@ -98,7 +98,7 @@ function makeFavorite(element){
 
 async function startPage(){
     const data = await axios.get(`${myAPI}/api/persons`);
-    for(let i = 0 ; i < data.data.length ; i++){
-        addContact(data.data[i].name, data.data[i].number)
+    for(let i = 0 ; i < data.length ; i++){
+        addContact(data[i].name, data[i].number)
     }
 }

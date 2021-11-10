@@ -20,9 +20,9 @@ app.use(cors())
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-app.use('/', express.static(`${__dirname}/../Front`))
+app.use('/', express.static(`${__dirname}/../../dist`))
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/../Front/index.html`)
+  res.sendFile(`${__dirname}/../../dist/index.html`)
 })
 
 app.use('/api/persons', personsRouter)

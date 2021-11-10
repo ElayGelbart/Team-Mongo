@@ -45,19 +45,25 @@ router.delete('/api/persons/:id', (req, res) => {
 })
 
 router.post('/api/persons', (req, res) => {
-    const generatedId = Math.floor(Math.random()*100000);
     const { name, number } = req.body;
     if(!name || !number){
         res.status(400).send({error: "Missing information"});
         return;
     }
-    if(checkTakenName(name, data)) {
-        res.status(400).send({error: "Name is taken."});
-        return;
-    }
-    const addPerson = {id: generatedId, name, number };
-    data.push(addPerson);
-    res.send(data);
+    // if(checkTakenName(name, data)) {
+    //     res.status(400).send({error: "Name is taken."});
+    //     return;
+    // }
+    const person = new Person({
+        name,
+        number
+    })
+    person.save().then(result =>{
+        console.log(`added ${name} number ${number} to phonebook`);
+        Person.find({}).then(result => {
+            res.send(result);
+        })
+    })
 })
 
 module.exports = router;

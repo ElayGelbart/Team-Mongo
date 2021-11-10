@@ -1,57 +1,60 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+
 // for dev on local
 // const HOST = "http://localhost:8080"
-const HOST = "https://egmongodb.herokuapp.com"
+const HOST = 'https://egmongodb.herokuapp.com'
 const getPhoneBook = async () => {
-  const response = await fetch(`${HOST}/api/persons`);
-  const responseArrayPerson = await response.json();
-  document.getElementById("phonebookTableBody").innerHTML = ""; // reset Table
+  const response = await fetch(`${HOST}/api/persons`)
+  const responseArrayPerson = await response.json()
+  document.getElementById('phonebookTableBody').innerHTML = '' // reset Table
   for (let personObj of responseArrayPerson) {
-    const tr = document.createElement("tr");
-    const idTH = document.createElement("th");
-    const nameTD = document.createElement("td");
-    const numberTD = document.createElement("td");
-    idTH.setAttribute("scope", "row");
-    idTH.innerText = personObj._id;
-    nameTD.innerText = personObj.name;
+    const tr = document.createElement('tr')
+    const idTH = document.createElement('th')
+    const nameTD = document.createElement('td')
+    const numberTD = document.createElement('td')
+    idTH.setAttribute('scope', 'row')
+    idTH.innerText = personObj._id
+    nameTD.innerText = personObj.name
     numberTD.innerText = personObj.phoneNumber
-    tr.append(idTH, nameTD, numberTD);
-    document.getElementById("phonebookTableBody").appendChild(tr);
+    tr.append(idTH, nameTD, numberTD)
+    document.getElementById('phonebookTableBody').appendChild(tr)
   }
 }
-getPhoneBook();
+getPhoneBook()
 
 const addPersonToServer = async () => {
-  const userNameElem = document.getElementById("validationCustomName");
-  const userPhoneNumberElem = document.getElementById("validationCustomPhoneNumber");
-  const nameValdElem = document.getElementById("nameValidationText");
-  const phoneValdElem = document.getElementById("phoneValidationText");
+  const userNameElem = document.getElementById('validationCustomName')
+  const userPhoneNumberElem = document.getElementById('validationCustomPhoneNumber')
+  const nameValdElem = document.getElementById('nameValidationText')
+  const phoneValdElem = document.getElementById('phoneValidationText')
 
   if (!validator.isAlpha(userNameElem.value) || !validator.isLength(userNameElem.value, { min: 3, max: 15 })) {
-    userNameElem.classList.add("is-invalid")
-    nameValdElem.innerText = "Name Not Valid";
-    nameValdElem.className = "invalid-feedback";
-    return;
+    userNameElem.classList.add('is-invalid')
+    nameValdElem.innerText = 'Name Not Valid'
+    nameValdElem.className = 'invalid-feedback'
+    return
   } else {
-    userNameElem.classList.remove("is-invalid")
-    userNameElem.classList.add("is-valid")
-    nameValdElem.innerText = "Good Name";
-    nameValdElem.className = "valid-feedback";
+    userNameElem.classList.remove('is-invalid')
+    userNameElem.classList.add('is-valid')
+    nameValdElem.innerText = 'Good Name'
+    nameValdElem.className = 'valid-feedback'
   }
   if (!validator.isMobilePhone(userPhoneNumberElem.value)) {
-    userPhoneNumberElem.classList.add("is-invalid")
-    phoneValdElem.innerText = "Phone Not Valid";
-    phoneValdElem.className = "invalid-feedback";
-    return;
+    userPhoneNumberElem.classList.add('is-invalid')
+    phoneValdElem.innerText = 'Phone Not Valid'
+    phoneValdElem.className = 'invalid-feedback'
+    return
   } else {
-    userPhoneNumberElem.classList.remove("is-invalid")
-    userPhoneNumberElem.classList.add("is-valid")
-    phoneValdElem.innerText = "Great Phone";
-    phoneValdElem.className = "valid-feedback";
+    userPhoneNumberElem.classList.remove('is-invalid')
+    userPhoneNumberElem.classList.add('is-valid')
+    phoneValdElem.innerText = 'Great Phone'
+    phoneValdElem.className = 'valid-feedback'
   }
 
   try {
     const response = await fetch(`${HOST}/api/persons`, {
-      method: "POST",
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
@@ -61,22 +64,22 @@ const addPersonToServer = async () => {
       })
     }).then((res) => {
       if (!res.ok) {
-        throw new Error("UserNameTaken")
+        throw new Error('UserNameTaken')
       }
-      return res;
-    });
-    getPhoneBook(); // Update Phonebook
+      return res
+    })
+    getPhoneBook() // Update Phonebook
   } catch (err) {
-    userNameElem.classList.add("is-invalid")
-    nameValdElem.innerText = "Name Taken";
-    nameValdElem.className = "invalid-feedback";
+    userNameElem.classList.add('is-invalid')
+    nameValdElem.innerText = 'Name Taken'
+    nameValdElem.className = 'invalid-feedback'
   }
 }
 
 const getPersonFromPhonebook = async () => {
-  const personID = document.getElementById("validationCustomPersonId").value;
+  const personID = document.getElementById('validationCustomPersonId').value
   if (!personID) {
-    return;
+    return
   }
   try {
     const response = await fetch(`${HOST}/api/persons/${personID}`, {
@@ -85,13 +88,13 @@ const getPersonFromPhonebook = async () => {
       }
     }).then((res) => {
       if (!res.ok) {
-        throw new Error("NO ID IN DB");
+        throw new Error('NO ID IN DB')
       }
-      return res;
+      return res
     }
-    );
-    const personObj = await response.json();
-    document.getElementById("tablePersonData").innerHTML = `
+    )
+    const personObj = await response.json()
+    document.getElementById('tablePersonData').innerHTML = `
     <thead>
     <tr>
       <th scope="col">ID</th>
@@ -109,32 +112,32 @@ const getPersonFromPhonebook = async () => {
     </tr>
   </tbody>
   `
-    document.getElementById("searchValidationText").innerText = "";
+    document.getElementById('searchValidationText').innerText = ''
   } catch (err) {
-    document.getElementById("validationCustomPersonId").classList.add("is-invalid")
-    document.getElementById("searchValidationText").innerText = "Person Not In Phonebook";
+    document.getElementById('validationCustomPersonId').classList.add('is-invalid')
+    document.getElementById('searchValidationText').innerText = 'Person Not In Phonebook'
   }
 }
 
 const deletePersonID = async (PersonID) => {
   try {
-    console.log(PersonID);
+    console.log(PersonID)
     const response = await fetch(`${HOST}/api/persons/delete/${PersonID}`, {
-      method: "DELETE"
+      method: 'DELETE'
     }).then((res) => {
       if (!res.ok) {
-        throw new Error("cant delete");
+        throw new Error('cant delete')
       }
-      return res;
-    });
-    document.getElementById("tablePersonData").innerHTML = "";
-    getPhoneBook();
+      return res
+    })
+    document.getElementById('tablePersonData').innerHTML = ''
+    getPhoneBook()
   } catch (err) {
-    console.log(err);
+    console.log(err)
   }
 }
 
 //Eventlistners
-document.getElementById("getPhonebookBtn").addEventListener("click", getPhoneBook)
-document.getElementById("sendServerNewPerson").addEventListener("click", addPersonToServer)
-document.getElementById("sendSearchPersonIdBtn").addEventListener("click", getPersonFromPhonebook)
+document.getElementById('getPhonebookBtn').addEventListener('click', getPhoneBook)
+document.getElementById('sendServerNewPerson').addEventListener('click', addPersonToServer)
+document.getElementById('sendSearchPersonIdBtn').addEventListener('click', getPersonFromPhonebook)

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 const personSchema = new mongoose.Schema(
   {
     name: {
@@ -12,5 +12,5 @@ const personSchema = new mongoose.Schema(
       maxlength: 20
     }
   }
-);
-module.exports = mongoose.model('Person', personSchema);
+)
+module.exports = mongoose.model('Person', personSchema)

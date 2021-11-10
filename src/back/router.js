@@ -33,15 +33,12 @@ router.get('/api/persons/:id', (req, res) => {
 })
 
 router.delete('/api/persons/:id', (req, res) => {
-    const personId = Number(req.params.id);
-    const matchingPerson = (getMatchingPerson(personId, data));
-    if(matchingPerson){
-        data.splice(data.indexOf(matchingPerson),1);
-        res.send(data);
-    }
-    else{
-        res.status(400).send({error: "Can't find person"});  
-    }
+    const personId = req.params.id;
+    Person.findByIdAndDelete(personId).then(result => {
+        Person.find({}).then(result => {
+            res.send(result);
+        })
+    }).catch(error => console.log(error));
 })
 
 router.post('/api/persons', (req, res) => {

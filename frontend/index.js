@@ -99,6 +99,6 @@ function makeFavorite(element){
 async function startPage(){
     const data = await axios.get(`${myAPI}/api/persons`);
     for(let i = 0 ; i < data.data.length ; i++){
-        addContact(data.data[i].name, data.data[i].number)
+        addContact(data.data[i].name, data.data[i].phoneNumber)
     }
 }

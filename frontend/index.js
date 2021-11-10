@@ -29,12 +29,10 @@ addBtn.addEventListener("click", async function(){
         return;
     }
     try {
-        console.log("before axios");
         const response = await axios.post(`${myAPI}/api/persons`, {
             "name" : fullName,
             "number" : phoneNumber  
         })
-        console.log("after axios",response);
         errormsg.innerText = response.data;
         setTimeout(()=>{errormsg.innerText = ""}, 3000);
         addContact(fullName, phoneNumber);
@@ -47,7 +45,6 @@ addBtn.addEventListener("click", async function(){
 
 showAll.addEventListener("click", async function(){
     await startPage()
-    console.log("in front show");
     showAll.style.visibility ="hidden";
     hideAll.style.visibility = "visible";
 })
@@ -101,7 +98,6 @@ function makeFavorite(element){
 
 async function startPage(){
     const data = await axios.get(`${myAPI}/api/persons`);
-    console.log(data);
     for(let i = 0 ; i < data.data.length ; i++){
         addContact(data.data[i].name, data.data[i].number)
     }

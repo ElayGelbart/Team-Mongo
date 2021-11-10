@@ -1,24 +1,27 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+// const key = process.env.DATABASE1;
+// const key1 = process.env.DATABASE2;
+// const password = process.argv[2]
+// const connectionString = key+password+key1;
+// program(process.argv[2], process.argv[3], process.argv[4])
 
-const phonBookSchema = new mongoose.Schema({
-    id : Number,
-    name: String,
-    phoneNumber: Number
-})
-
-const Note = mongoose.model('Contacts', phonBookSchema)
-
-const key = process.env.DATABASE;
-const key1 = process.env.DATABASE2;
-const password = process.argv[2]
-
-const connectionString = key+password+key1;
+const connectionString = process.env.DATABASE;
 
 mongoose.connect(connectionString)
-.then(console.log("DB connected"));
+.then(()=>{console.log("DB connected")})
+.catch((error)=>{'error connecting to MongoDB:', error.message});
 
+const phoneBookSchema = new mongoose.Schema({
+    id : {
+      type :  Number,
+      unique : true,
+      required: true
+    },
+    name: String,
+    phoneNumber: String
+})
 
 function program(password, name, phoneNum){
     if( !name && !phoneNum){
@@ -56,15 +59,4 @@ function program(password, name, phoneNum){
     })      
 }
 
-function makeId(phonebook){
-    let k = 0;
-    for (let contact of phonebook){
-        if(contact.id > k){
-            k = contact.id;
-        }
-    }
-    return (+k +1)
-}
-
-program(process.argv[2], process.argv[3], process.argv[4])
-
+module.exports = mongoose.model('Contacts', phoneBookSchema)

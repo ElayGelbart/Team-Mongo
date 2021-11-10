@@ -1,89 +1,102 @@
-// server code
 const express = require('express');
-const morgan = require('morgan');
 const path = require('path')
-const data = require("./database");
+const Note = require('../models/note');
+require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
+const connectionString = process.env.DATABASE;
 
 app.listen(port, ()=>{
     console.log("running...");
 });
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../frontend")))
-
 
 app.get("/" , (req,res)=>{
     res.sendFile("../frontend/index.html")
 });
 
 
-morgan.token("data", (req) =>{
-    return JSON.stringify(req.body);
-})
-app.use(morgan(":method :url :status :res[content-length] - :response-time ms :data", {
-    skip : function(req,res){
-       return req.method !== "POST" 
-    }    
-}))
-
-app.get("/api/persons",  function (req,res){
-    res.send(data.data);
+app.get("/api/persons", async function (req,res){
+    const data = await Note.find({});
+    res.send(data);
 });
 
-app.get("/info", function (req,res){
-    res.send({Contacts: data.data.length, date:new Date()})
+app.get("/info", async function (req,res){
+    const data = await Note.find({});
+    res.send({Contacts: data.length, date:new Date()});
 });
 
-app.get("/api/persons/:id", function (req,res){
+app.get("/api/persons/:id", async function (req,res){
     const id = req.params.id;
-    let contact;
-    for (let i =0; i<data.data.length; i++){
-        if(+data.data[i].id === +id){
-            contact = data.data[i];
-            res.send(contact);
-            return
+    try {
+        const contact = await Note.find({id: id});
+        if(contact[0]){
+            res.send(contact[0]);
+        }else{
+            throw "Wrong Id";
         }
-    }
-    res.status(404).send("Cant find person");
+    } catch (error) {
+        res.status(400).send("Cant find person");
+    }   
 })
 
-app.delete("/api/persons/:id", function (req,res){
+app.delete("/api/persons/:id", async function (req,res){
     const id = req.params.id;
-    for (let i =0; i<data.data.length; i++){
-        if(+data.data[i].id === +id){
-            data.data.splice(i,1);
+    try {
+        const response = await Note.deleteOne({ id : id })    
+        if(response.deletedCount === 1){
             res.send("Deleted successfully!");
-            return
+            return;
+        }else{
+            throw "error";
         }
-    }
-    res.status(404).send("Cant find person");
-})
+       
+    } catch (err) {
+        res.status(400).send("Cant find person");  
+    }       
+ })
 
-app.post("/api/persons", function (req,res){
+app.post("/api/persons", async function (req,res){
+    if (req.body === undefined) {
+        return res.status(400).json({ error: 'content missing' })
+    }
     const newContactName = req.body.name;
     const newContactNumber = req.body.number;
     if(!newContactName || !newContactNumber){
-        res.status(403).send("The name or the number is missing");
+        res.status(400).send("The name or the number is missing");
         return;
-    }
-    let idNumber = 0;
-    for(let i = 0; i < data.data.length; i++){
-        if(data.data[i].name === newContactName){
-            res.status(403).send("That name is already exists in your phonebook");
-            return;
+    } 
+    try {
+    const data = await Note.find({});
+    const newId = makeId(data);
+    for(let i = 0; i < data.length; i++ ){
+        if(data[i].phoneNumber === newContactNumber){
+        res.status(403).send("This number is already exists in your phonebook");
+        return;
         }
-        if(data.data[i].id > idNumber){
-            idNumber = data.data[i].id 
-        }
-    }
-    const newContact = {
-        "id": idNumber+1,
+    }           
+    const newContact = new Note({
+        "id": newId,
         "name": newContactName,
-        "number": newContactNumber
+        "phoneNumber": newContactNumber
+    })
+    newContact.save().then((savedContact)=>{
+        res.send(`${savedContact.name} successfully add to your phonebook!`);
+    })
+    } catch (error) {
+        res.send(error);
     }
-    data.data.push(newContact);
-    res.send(`${newContact.name} successfully add to your phonebook!`);
 })
 
+function makeId(phonebook){
+    let k = 0;
+    for (let contact of phonebook){
+        if(contact.id > k){
+            k = contact.id;
+        }
+    }
+    return (+k +1)
+}

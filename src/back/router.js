@@ -12,36 +12,38 @@ router.get('/', (req, res) => {
     res.sendFile(`${__dirname}/../front/index.html`);
 })
 
-router.get('/api/persons', (req, res) => {
+router.get('/api/persons', (req, res, next) => {
     Person.find({}).then(result => {
         res.send(result);
     })
+    .catch(error => next({ status: 404, message: 'No data'}));
 })
 
-router.get('/info', (req, res) => {
+router.get('/info', (req, res, next) => {
     Person.find({}).then(result => {
         res.send(`Phonebook has info for ${result.length} people. \n ${Date()}`);
     })
+    .catch(error => next({ status: 404, message: 'No data'}));
 })
 
-router.get('/api/persons/:id', (req, res) => {
+router.get('/api/persons/:id', (req, res, next) => {
     const personId = req.params.id;
     Person.find({ _id: personId }).then(result => {
         res.send(result[0]);
     })
-    .catch(error => console.log(error))
+    .catch(error => next({ status: 400, message: "Can't find person"}));
 })
 
-router.delete('/api/persons/:id', (req, res) => {
+router.delete('/api/persons/:id', (req, res, next) => {
     const personId = req.params.id;
     Person.findByIdAndDelete(personId).then(result => {
         Person.find({}).then(result => {
             res.send(result);
-        })
-    }).catch(error => console.log(error));
+        }).catch(error => next({ status: 404, message: 'No data'}));
+    }).catch(error => next({ status: 400, message: "Can't find person"}));
 })
 
-router.post('/api/persons', (req, res) => {
+router.post('/api/persons', (req, res, next) => {
     const { name, number } = req.body;
     if(!name || !number){
         res.status(400).send({error: "Missing information"});
@@ -59,8 +61,8 @@ router.post('/api/persons', (req, res) => {
         console.log(`added ${name} number ${number} to phonebook`);
         Person.find({}).then(result => {
             res.send(result);
-        })
-    })
+        }).catch(error => next({ status: 404, message: 'No data'}));
+    }).catch(error => next({ status: 400, message: "Can't save"}));
 })
 
 module.exports = router;

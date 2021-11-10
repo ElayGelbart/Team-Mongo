@@ -4,6 +4,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const router = require('./router');
+const errorHandler = require('./middlewares/errorHandler');
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -29,4 +30,6 @@ app.use(morgan(':method :url :status :response-time ms - :res[content-length] :d
 }));
 
 app.use('/', router);
+
+app.use(errorHandler);
 

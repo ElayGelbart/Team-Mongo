@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path')
 const Note = require('../models/note');
+const cors = require("cors")
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3001;
@@ -9,7 +10,7 @@ const connectionString = process.env.DATABASE;
 app.listen(port, ()=>{
     console.log("running...");
 });
-
+app.use(cors());
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, "../frontend")))

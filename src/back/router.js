@@ -43,16 +43,16 @@ router.delete('/api/persons/:id', (req, res, next) => {
     }).catch(error => next({ status: 400, message: "Can't find person"}));
 })
 
-router.post('/api/persons', (req, res, next) => {
+router.post('/api/persons', async (req, res, next) => {
     const { name, number } = req.body;
     if(!name || !number){
-        res.status(400).send({error: "Missing information"});
+        next({ status: 400, message: "Missing information"});
         return;
     }
-    // if(checkTakenName(name, data)) {
-    //     res.status(400).send({error: "Name is taken."});
-    //     return;
-    // }
+    const personList = await Person.find({});
+    for(let person of personList){
+        if(person.name === name) return res.send(['Name taken', person._id.toString()]);
+    }
     const person = new Person({
         name,
         number
@@ -61,8 +61,22 @@ router.post('/api/persons', (req, res, next) => {
         console.log(`added ${name} number ${number} to phonebook`);
         Person.find({}).then(result => {
             res.send(result);
-        }).catch(error => next({ status: 404, message: 'No data'}));
-    }).catch(error => next({ status: 400, message: "Can't save"}));
+        }).catch( error => next({ status: 404, message: 'No data'}) );
+    }).catch( error => next({ status: 400, message: "Can't save"}) );
+})
+
+router.put('/api/persons', (req, res, next) => {
+    const { existingId, name, number } = req.body;
+    existingId
+    const updatedPerson = {
+        name,
+        number
+    }
+    Person.findByIdAndUpdate(existingId, updatedPerson).then(result => {
+        Person.find({}).then(result => {
+            res.send(result);
+        }).catch(error => next({ status: 404, message: 'No data'}) );
+    }).catch(error => next({ status: 400, message: "Can't find person"}) );
 })
 
 module.exports = router;

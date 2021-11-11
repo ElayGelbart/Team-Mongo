@@ -1,8 +1,8 @@
 import * as dom from './DOM';
 
 document.body.style.backgroundColor = 'cornsilk';
-const baseURL = 'https://localhost:3001';
-// const baseURL = 'https://ehood-phonebook.herokuapp.com/api/persons';
+// const baseURL = 'http://localhost:3001/api/persons';
+const baseURL = 'https://ehood-phonebook.herokuapp.com/api/persons';
 
 /**
  * Fetches phonebook data from server and displays it.
@@ -43,7 +43,16 @@ async function addPerson(){
     const { id, name, number } = addPersonValues;
     try{
         const response = await axios.post(baseURL, { id, name, number });
-        dom.displayPhonebook(response.data);
+        if(response.data[0] === 'Name taken'){
+            const existingId = response.data[1];
+            const putResponse = await axios.put(`${baseURL}`, { existingId, name, number});
+            dom.displayPhonebook(putResponse.data);
+            return;
+        }
+        else{
+            dom.displayPhonebook(response.data);
+            return;
+        }
     }
     catch(error){
         dom.displayError(error.response.data.error, 'add');

@@ -3,6 +3,7 @@
  * @param {Array} phonebook - All entries saved in the phonebook
  */
  export function displayPhonebook(phonebook){
+     if(typeof(phonebook) !== 'object') return;
     emptyPhonebookDisplay();
     const phonebookTable = document.querySelector('#phonebook');
     for(let entry of phonebook){

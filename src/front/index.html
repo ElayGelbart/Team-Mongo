@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phonebook</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./bundled.js" defer></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="page">
+        <table id="phonebook">
+            <tr id="phonebook_headers">
+                <th>ID</th>
+                <th>Name</th>
+                <th>Number</th>
+            </tr>
+        </table>
+
+        <input id="search_id" placeholder="Search for a person">
+        <button id="search_btn">Search</button>
+        <div id="search_result" class="results"></div>
+
+        <input id="delete_id" placeholder="Search for a person to delete">
+        <button id="delete_btn">Delete</button>
+        <div id="delete_result" class="results"></div>
+
+        <input id="new_name" class="new_person" placeholder="Enter name">
+        <input id="new_number" class="new_person" placeholder="Enter number">
+        <button id="submit_btn">Submit</button>
+        <div id="new_result" class="results"></div>
+    </div>
+</body>
+</html>

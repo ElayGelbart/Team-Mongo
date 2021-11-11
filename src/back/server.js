@@ -15,7 +15,7 @@ app.listen(port, () => {
 })
 
 mongoose
-    .connect(process.env.DATABASE, {
+    .connect(process.env.DATABASE || process.env.MONGODB_URI, {
         useNewUrlParser: true
     })
     .then(()=>{

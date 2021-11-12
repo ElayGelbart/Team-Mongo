@@ -2,10 +2,22 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const morgan = require('morgan');
+const mongoose = require("mongoose");
 const { data } = require("../data")
 const path = require("path");
+const Person = require("../models/person")
 
 const { errorHandler } = require("./handlers/errorHandler")
+
+/*mongoose config */
+const dbURI = "mongodb+srv://teon77:77276579@cluster0.12rzz.mongodb.net/personsTask?retryWrites=true&w=majority"
+mongoose.connect(dbURI, {useNewUrlParser: true , useUnifiedTopology: true})
+.then((result) => app.listen(process.env.PORT || 3001, () => {
+    console.log(`Express is working`);
+  }))
+.catch((err) => console.log(err))
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -22,7 +34,14 @@ app.get('/', async (req, res) => {
 });
 
 app.get("/api/persons", (req, res) => {
-    res.send(data)
+    Person.find()
+    .then((result) => {
+        res.send(result)
+    })
+    .catch((err) => {
+        console.log(err);
+    })
+   
 });
 
 app.get("/info", (req, res) => {
@@ -36,17 +55,18 @@ app.get('/api/persons/:id', (req, res, next) => {
 });
 
 app.delete('/api/persons/:id', (req, res, next) => {
-    console.log("in here");
-    const personObj = data.find(person => person.id === Number(req.params.id));
-    if(!personObj) {
-        data.splice(data.indexOf(personObj), 1)
-        res.send("Deleted Successfully");
-        }
-        else {
+    
+    const personId = req.params.id;
+    Person.findOneAndDelete({id: personId}, (err, docs) => {
+        if(err) {
+            console.log(err);
             next(400);
         }
+        else {
+           res.send();
+        }
+    })
 })
-
 
 app.post("/api/persons", (req, res, next) => {
     const { name, number } = req.body;
@@ -54,22 +74,33 @@ app.post("/api/persons", (req, res, next) => {
         next(422)
     }
 
-    const personByName = data.find(person => person.name === name);
-    if (!personByName) {
-        const newPersonObject = { "id": Math.floor(Math.random() * 10000), name, number };          // generates id, could have done it differently
-        data.push(newPersonObject);
-        res.send("Saved Successfully");
-        return;
+    Person.find({name: name} , (err, result) => {
+        if(err) {
+            console.log(err);
         }
         else {
-            console.log("im here");
-            next(406);
+            next(406)
         }
+    })
+        const person = new Person({
+        id:  Math.floor(Math.random() * 10000),
+        name,
+        number
+    })
+
+    person.save()
+    .then((result) => {
+        if(result)
+        res.send("Saved Successfully");
+    })
+    .catch((err) => {
+        console.log(err);
+    })
 })
 
 app.use(errorHandler);
 
-const server = app.listen(process.env.PORT || 3001, () => {
-    const port = server.address().port;
-    console.log(`Express is working on port ${port}`);
-  });
+// const server = app.listen(process.env.PORT || 3001, () => {
+//     const port = server.address().port;
+//     console.log(`Express is working on port ${port}`);
+//   });
